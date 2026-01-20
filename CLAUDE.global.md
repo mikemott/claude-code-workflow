@@ -146,6 +146,34 @@ Common queries:
 - Issue details: `{ issue(id: "ISSUE-ID") { identifier title description state { name } assignee { name } } }`
 - Update status: `mutation { issueUpdate(id: "ISSUE-ID", input: { stateId: "STATE-ID" }) { issue { id } } }`
 
+### Cloudflare - Use `wrangler` CLI
+
+```bash
+# Workers
+npx wrangler dev                      # Local development
+npx wrangler deploy                   # Deploy worker
+npx wrangler tail                     # Stream logs
+npx wrangler secret put SECRET_NAME   # Set secret
+
+# D1 Database
+npx wrangler d1 list                  # List databases
+npx wrangler d1 execute DB_NAME --command "SELECT * FROM users"
+npx wrangler d1 migrations apply DB_NAME
+
+# KV Storage
+npx wrangler kv:namespace list
+npx wrangler kv:key list --namespace-id ID
+npx wrangler kv:key get KEY --namespace-id ID
+
+# Pages
+npx wrangler pages deploy ./dist      # Deploy pages
+npx wrangler pages project list
+
+# R2 Storage
+npx wrangler r2 bucket list
+npx wrangler r2 object get BUCKET/KEY
+```
+
 ### Other Tools
 
 | Tool | Purpose |
@@ -153,7 +181,6 @@ Common queries:
 | **PR-Agent** | Automated code review on PRs |
 | **Context7** | Documentation and codebase search |
 | **Sentry** | Error tracking and performance monitoring |
-| **Cloudflare** | Pages (frontend), Workers (serverless), D1 (database) |
 | **Fly.io** | Container deployment |
 
 ## Custom Commands
