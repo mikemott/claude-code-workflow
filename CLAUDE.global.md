@@ -124,19 +124,27 @@ gh pr merge 123
 gh api repos/{owner}/{repo}/...
 ```
 
-### Linear - Use `curl` with GraphQL API
-Linear CLI not installed. Use direct API calls:
+### Linear - Hybrid: `lin` CLI + GraphQL API
+
+**Use `lin` CLI for:**
+```bash
+lin new                  # Create new issue interactively
+lin checkout             # Checkout branch for started issue
+```
+
+**Use GraphQL API for listing/viewing/updating:**
 ```bash
 # Requires LINEAR_API_KEY in environment
-curl -X POST https://api.linear.app/graphql \
+curl -s -X POST https://api.linear.app/graphql \
   -H "Authorization: $LINEAR_API_KEY" \
   -H "Content-Type: application/json" \
-  -d '{"query": "{ issues { nodes { id title } } }"}'
+  -d '{"query": "..."}' | jq
 ```
 
 Common queries:
-- My issues: `{ viewer { assignedIssues { nodes { identifier title state { name } } } } }`
-- Create issue: `mutation { issueCreate(input: { teamId: "...", title: "..." }) { issue { id } } }`
+- My issues: `{ viewer { assignedIssues(filter: { state: { type: { nin: ["completed", "canceled"] } } }) { nodes { identifier title state { name } priority } } } }`
+- Issue details: `{ issue(id: "ISSUE-ID") { identifier title description state { name } assignee { name } } }`
+- Update status: `mutation { issueUpdate(id: "ISSUE-ID", input: { stateId: "STATE-ID" }) { issue { id } } }`
 
 ### Other Tools
 
