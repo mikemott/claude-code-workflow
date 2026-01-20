@@ -103,12 +103,45 @@ Before completing any task:
 - Address PR-Agent feedback
 - Update Linear issue status
 
-## Tool Reference
+## Tool Preferences
+
+**Prefer CLI tools over MCP servers** when available. CLI tools are faster and don't require extra context.
+
+### GitHub - Use `gh` CLI
+```bash
+# Issues
+gh issue list
+gh issue create --title "..." --body "..."
+gh issue view 123
+
+# Pull Requests
+gh pr list
+gh pr create --title "..." --body "..."
+gh pr view 123
+gh pr merge 123
+
+# API (for anything else)
+gh api repos/{owner}/{repo}/...
+```
+
+### Linear - Use `curl` with GraphQL API
+Linear CLI not installed. Use direct API calls:
+```bash
+# Requires LINEAR_API_KEY in environment
+curl -X POST https://api.linear.app/graphql \
+  -H "Authorization: $LINEAR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"query": "{ issues { nodes { id title } } }"}'
+```
+
+Common queries:
+- My issues: `{ viewer { assignedIssues { nodes { identifier title state { name } } } } }`
+- Create issue: `mutation { issueCreate(input: { teamId: "...", title: "..." }) { issue { id } } }`
+
+### Other Tools
 
 | Tool | Purpose |
 |------|---------|
-| **Linear** | Issue tracking - use issue IDs in commits/branches |
-| **GitHub** | PRs, code review, CI/CD |
 | **PR-Agent** | Automated code review on PRs |
 | **Context7** | Documentation and codebase search |
 | **Sentry** | Error tracking and performance monitoring |
